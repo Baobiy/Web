@@ -1,0 +1,28 @@
+html{
+	background-color: white;
+	font-size: 20px;
+	font-family: 'Slabo 27px', serif;
+}
+
+h1{
+	margin: 0;
+	padding: 20px 0;
+	color: #F5ACC2;
+	text-shadow: 3px 3px 2px black;
+	font-size: 30px;
+
+}
+
+ul{
+	margin: 0;
+	/*padding: 5px 0;*/
+	color: #F5ACC5;
+	text-shadow: 2px 2px 5px #F5ACC2;
+	font-size: 25px;
+}
+
+p, li{
+	font-size: 16px;
+	line-height: 2;
+	letter-spacing: 1px;
+}
