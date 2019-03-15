@@ -433,3 +433,152 @@ Twitter 还拥有自己的类型的专有元数据协议，当网站的 URL 显�
 
 统一资源定位器（英文：**U**niform **R**esource **L**ocator，简写：URL）是一个定义了在网络上的位置的一个文本字符串。例如Mozilla的英文主页定位在`https://www.mozilla.org/en-US/`.
 
+URL使用路径查找文件。路径指定文件系统中您感兴趣的文件所在的位置。
+
+![1552531329150](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1552531329150.png)
+
+此目录结构的根目录称为`creation-hyperlinks`。当在网站上工作时， 你会有一个包含整个网站的目录。在根目录，我们有一个`index.html`和一个`contacts.html`文件。在真实的网站上，`index.html` 将会成为我们的主页或登录页面。
+
+我们的根目录还有两个目录—— `pdfs` 和`projects`，它们分别包含一个 PDF (`project-brief.pdf`) 文件和一个`index.html` 文件。请注意你可以有两个`index.html`文件，前提是他们在不同的目录下，许多网站就是如此。第二个`index.html`或许是项目相关信息的主登录界面。
+
+- **指向相同目录：**如果index.html（顶层的index.html）想要包含一个超链接指向contacts.html，你只需要指定想要链接的文件名，因为它与当前文件是在同一个目录的。所以你应该使用的URL是contacts.html。
+
+  ```html
+  <p>Want to contact a specific staff member?
+  Find details on our <a href="contacts.html">contacts page</a>.</p>
+  ```
+
+- **指向子目录：**如果你想要包含一个超链接到index.html（顶层index.html）指向project/index.html，你需要进入项目目录，然后指明要链接到的文件。通过指定目录的名称，然后是正斜杠，然后是文件的名称。因此你要使用的URL是project/index.html
+
+  ```html
+  <p>Visit my <a href="projects/index.html">project homepage</a>.</p>
+  ```
+
+- **指向上级目录：**如果你想在`projects/index.html`中包含一个指向`pdfs/project-brief.pdf`的超链接，你必须返回上级目录，然后再回到`pdf`目录。“返回上一个目录级”使用两个英文点号表示 — `..` — 所以你应该使用的URL是 `../pdfs/project-brief.pdf`：
+
+  ```html
+  <p>A link to my <a href="../pdfs/project-brief.pdf">project brief</a>.</p>
+  ```
+
+  注意：如果需要的话，你可以将这些功能的多个例子和复杂的url结合起来。例如：`../../../complex/path/to/my/file.html`.
+
+#### 文档片段
+
+超链接可以链接到html文档的特定部分（被称为**文档片段**），而不仅仅是文件的顶部。要做到这一点你必须首先分配一个`id`属性的元素到链接。通常链接到一个特定的标题是有意义的，所以这看起来像下面的内容：
+
+```html
+<h2 id="Mailing_address">Mailing address</h2>	
+```
+
+然后链接到那个特定的`id`，您可以在URL的结尾包含它，前面是一个井号（#），例如：
+
+```html
+<p>Want to write us a letter? Use our <a href="contacts.html#Mailing_address">mailing address</a>.</p>
+```
+
+你甚至可以用它自己的文档片段参考链接到同一份文件的另一部分：
+
+```html
+<p>The <a href="#Mailing_address">company mailing address</a> can be found at the bottom of this page.</p>	
+```
+
+#### 绝对链接和相对链接
+
+绝对URL： 指向由其在Web上的绝对位置定义的位置，包括 [协议](https://developer.mozilla.org/zh-CN/docs/Glossary/%E5%8D%8F%E8%AE%AE) and [域名](https://developer.mozilla.org/zh-CN/docs/Glossary/%E5%9F%9F%E5%90%8D). 像下面的例子,如果`index.html` 页面上传到`projects`这一个目录 。`project`位于web服务站点的根目录, web站点的域名为`http://www.example.com`, 这个页面可以通过`http://www.example.com/projects/index.html`访问 ( 或者仅仅通过`http://www.example.com/projects/`来访问, 因为大多数web服务通过访问`index.html`这样的页面来加载，如果没有特定的URL的话)
+
+**绝对URL总是指向相同的位置，不管它在哪里使用。**
+
+相对URL： 指向与您链接的文件相关的位置，更像我们在前面一节中所看到的位置。例如，如果我们想从示例文件链接`http://www.example.com/projects/index.html`转到相同目录下的一个PDF文件, URL就是文件名URL — 例如 `project-brief.pdf` —没有其他的信息要求. 如果PDF文件能够在`projects`的子目录`pdfs`中访问到, 相对路径就是`pdfs/project-brief.pdf`(对应的绝对URL就是 `http://www.example.com/projects/pdfs/project-brief.pdf`.)
+
+一个相对URL将指向不同的位置，这取决于它所在的文件所在的位置——例如，如果我们把`index.html` 文件 从 `projects` 目录移动出来并进入Web站点的根目录（最高级别，而不是任何目录中），  `pdfs/project-brief.pdf` 的相对URL将会指向`http://www.example.com/pdfs/project-brief.pdf`, 而不是`http://www.example.com/projects/pdfs/project-brief.pdf`.
+
+### 链接最佳实践
+
+#### 用清晰的链接措辞
+
+把链接放在你的页面上很容易。这还不够。我们需要让所有的读者都可以使用链接，不管他们当前的环境和哪些工具。例如：
+
+- 使用屏幕阅读器的用户喜欢从页面上的一个链接跳到另一个链接，并且脱离上下文来阅读链接。
+- 搜索引擎使用链接文本为索引目标文件所以，在链接文本中包含关键词是一个很好的主意，以有效地描述与之相关的信息。
+- 读者往往会浏览页面而不是阅读每一个字，他们的眼睛会被页面的特征所吸引，比如链接。他们会找到描述性的链接。
+
+其他提示：
+
+- 不要重复URL作为链接文本的一部分 — URL看起来很丑，当屏幕朗读器一个字母一个字母的读出来的时候听起来就更丑了。
+- 不要在链接文本中说“link”或“links to”——它只是噪音。屏幕阅读器告诉人们有一个链接。可视化用户也会知道有一个链接，因为链接通常是用不同的颜色设计的，并且存在下划线（这个惯例一般不应该被打破，因为用户习惯了它。）
+- 保持你的链接标签尽可能短-长链接尤其惹恼屏幕阅读器用户，他们必须听到整件事读出来。
+
+#### 尽可能使用相对链接
+
+- 首先，检查代码要容易得多——相对URL通常比绝对URL短得多，这使得阅读代码更容易。
+- 其次，在可能的情况下使用相对URL更有效。当使用绝对URL时，浏览器首先通过[DNS](https://developer.mozilla.org/en-US/docs/Glossary/DNS)（见[万维网是如何工作的](https://developer.mozilla.org/zh-CN/docs/Learn/Getting_started_with_the_web/How_the_Web_works)）查找服务器的真实位置，然后再转到该服务器并查找所请求的文件。另一方面，相对URL，浏览器只在同一服务器上查找被请求的文件。因此，如果你使用相对URL做的绝对URL，你就不断地让你的浏览器做额外的工作，这意味着它的效率会降低。
+
+#### 链接到非html资源 ——留下清晰的指示
+
+当链接到一个需要下载的资源（如PDF或Word文档）或流媒体（如视频或音频）或有另一个潜在的意想不到的效果（打开一个弹出窗口，或加载Flash电影），你应该添加明确的措辞，以减少任何混乱。
+
+#### 在下载链接时使用下载属性
+
+当您链接到要下载的资源而不是在浏览器中打开时，您可以使用下载属性来提供一个默认的保存文件名。
+
+#### HTML **<a>** type 属性
+
+type 属性规定链接中指向的文档的 mime 类型：
+
+```html
+<a href="//www.runoob.com/" type="text/html">runoob.com</a>
+```
+
+type 属性规定目标文档的 MIME 类型。
+
+只能在 href 属性存在时使用。
+
+该属性是 HTML5 中 <a> 元素的新属性。
+
+[MIME参考手册](http://www.w3school.com.cn/media/media_mimeref.asp)
+
+### 电子邮件链接
+
+当点击一个链接或按钮时，打开一个新的电子邮件发送信息而不是连接到一个资源或页面，这种情况是可能做到的。这样做是使用<a>元素和mailto：URL的方案。
+其最基本和最常用的使用形式为一个mailto:link （链接），链接简单说明收件人的电子邮件地址。
+
+```html
+<a href="mailto:nowhere@mozilla.org">Send email to nowhere</a>
+```
+
+实际上，邮件地址甚至是可选的。如果你忘记了（也就是说，你的`href`仅仅只是简单的"`mailto:`"），一个新的发送电子邮件的窗口也会被用户的邮件客户端打开，只是没有收件人的地址信息，这通常在“分享”链接是很有用的，用户可以发送给他们选择的地址邮件
+
+```html
+<a href="mailto:915@qq.com?cc=name2@rapidtables.com?bcc=name3@rapidtables.com&amp;subject=The%20subject%20of%20email &amp;body=The%20body%20of%20the%20email">
+	Send mail with cc,bcc,subject and body
+</a>
+```
+
+注：%20 是浏览器对于空格的编码
+
+[mailto:HTML e-mail链接](https://blog.csdn.net/xuemingyuan88/article/details/51298957/)
+
+这里有一些其他的示例`mailto`链接：
+
+- <mailto:>
+- <mailto:nowhere@mozilla.org>
+- <mailto:nowhere@mozilla.org,nobody@mozilla.org>
+- <mailto:nowhere@mozilla.org?cc=nobody@mozilla.org>
+- <mailto:nowhere@mozilla.org?cc=nobody@mozilla.org&subject=This%20is%20the%20subject>
+
+### 高阶文字排版
+
+[高阶文字排版](https://developer.mozilla.org/zh-CN/docs/Learn/HTML/Introduction_to_HTML/Advanced_text_formatting)
+
+#### 描述列表
+
+[描述列表](https://developer.mozilla.org/zh-CN/docs/Learn/HTML/Introduction_to_HTML/Advanced_text_formatting#%E6%8F%8F%E8%BF%B0%E5%88%97%E8%A1%A8)
+
+这种列表的目的是标记一组项目及其相关描述，例如术语和定义，或者是问题和答案等。
+
+描述列表使用与其他列表类型不同的闭合标签— <dl>; 此外，每一项都用 <dt> (description term) 元素闭合。每个描述都用 <dd> (description description) 元素闭合。
+
+浏览器的默认样式会在**描述列表的描述部分**（description description）和**描述术语**（description terms）之间产生缩进。MDN非常严密地遵循这一惯例，同时也鼓励关于术语的其他更多的定义（but also embolden the terms for extra definition）。
+
+请注意：一个术语 `<dt>` 可以同时有多个描述 `<dd>`
+
